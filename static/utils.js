@@ -19,3 +19,9 @@ function printEntries(obj) {
         console.log(key);
     }
 }
+
+const sortByIntValue = (obj, value) => {
+    return obj.sort(function(a, b) {
+        return a[value] - b[value];
+    });
+}

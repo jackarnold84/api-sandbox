@@ -16,3 +16,22 @@ const wikiSearch = async (search) => {
     .then(response => response.json())
     .catch(error => console.warn(error))
 };
+
+
+const publicForumAPI = async (action, post='') => {
+
+  apiUrl = 'https://p8q5t9dto5.execute-api.us-east-2.amazonaws.com/default/publicForum';
+
+  return fetch(apiUrl + '?' + new URLSearchParams(
+    {
+      'action': action,
+      'post': post,
+    }
+  ),
+    {
+      'method': 'GET',
+    }
+  )
+    .then(response => response.json())
+    .catch(error => console.warn(error))
+};

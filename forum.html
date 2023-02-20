@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Public Forum</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="static/images/icon.png">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="static/utils.js"></script>
+  <script src="api.js"></script>
+</head>
+
+
+
+<body>
+
+  <!-- HEADER -->
+  <a href="index.html">
+    <div class="w3-container w3-black w3-padding">
+      <div class="w3-center fit-width">
+        <h1 class="w3-xxlarge bold">API Sandbox</h1>
+      </div>
+    </div>
+  </a>
+
+
+  <!-- CONTENT -->
+  <div class="w3-container fit-width">
+
+    <br>
+    <h2 class="w3-center">Public Forum</h2>
+    <br>
+
+    <!-- Posts -->
+    <h5 class="w3-center">Recent Posts</h5>
+
+    <div id="post-holder" class="w3-margin-bottom"></div>
+    <p id="error-msg" class="w3-center w3-text-red"></p>
+
+    <br>
+
+
+    <!-- New post form -->
+    <div class="w3-container">
+      <form onsubmit="return handleSubmit(event)">
+        <label for="fname">New Post:</label><br>
+        <input type="text" id="post-input" class="w3-input w3-border" autocomplete="off"
+          placeholder="enter a message to post to the community board"><br>
+        <div class="w3-center">
+          <input type="submit" value="Post" class="w3-btn w3-green">
+        </div>
+      </form>
+    </div>
+    <br>
+
+  </div>
+
+</body>
+
+
+
+<!-- SCRIPTS -->
+<script>
+
+  // components
+  const PostComponent = (time, post) => (`
+    <div class="forum-post">
+      <span class="semibold">[${time}]</span>
+      ${post}
+    </div>
+  `)
+
+
+  // load posts
+  publicForumAPI('GET')
+    .then(response => {
+      posts = sortByIntValue(response.posts, 'timestamp');
+      posts.forEach(p => {
+        $('#post-holder').append(PostComponent(p.time, p.post));
+      })
+    })
+    .catch(error => {
+      $('#error-msg').text('An error occured while trying to load recent posts');
+    });
+
+  // add new post
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const post = $('#post-input').val();
+
+    publicForumAPI('POST', post)
+      .then(response => {
+        $('#post-holder').empty();
+        posts = sortByIntValue(response.posts, 'timestamp');
+        posts.forEach(p => {
+          $('#post-holder').append(PostComponent(p.time, p.post));
+        })
+        $('#post-input').val('');
+      })
+      .catch(error => {
+        $('#error-msg').text('An error occured while submitting your post');
+      });
+  };
+
+</script>
+
+
+</html>

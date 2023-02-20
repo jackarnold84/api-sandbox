@@ -3,8 +3,9 @@ import sys
 
 
 # testing function
-def test_lambda(handler, event={}, context={}):
+def test_lambda(handler, event={}, context={}, name=''):
     result = handler(event, context)
+    print('=====', name, '=====')
     if result['statusCode'] != 200:
         print(result)
         print()
@@ -23,5 +24,32 @@ test_lambda(
         'queryStringParameters': {
             'search': 'chicago bears'
         }
-    }
+    },
+    name='Wiki Search',
+)
+
+
+# publicForum
+sys.path.append('service/lambdas/publicForum')
+import lambdas.publicForum.lambda_function as publicForum
+
+test_lambda(
+    publicForum.lambda_handler,
+    event={
+        'queryStringParameters': {
+            'action': 'GET'
+        }
+    },
+    name='Public Forum GET',
+)
+
+test_lambda(
+    publicForum.lambda_handler,
+    event={
+        'queryStringParameters': {
+            'action': 'POST',
+            'post': 'I prefer pears over apples'
+        }
+    },
+    name='Public Forum POST',
 )
