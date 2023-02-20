@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Webpage Template</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="static/images/icon.png">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="static/utils.js"></script>
+  <script src="api.js"></script>
+</head>
+
+
+
+<body>
+
+  <!-- HEADER -->
+  <a href="index.html">
+    <div class="w3-container w3-black w3-padding">
+      <div class="w3-center fit-width">
+        <h1 class="w3-xxlarge bold">API Sandbox</h1>
+      </div>
+    </div>
+  </a>
+
+
+  <!-- CONTENT -->
+  <div class="w3-container fit-width">
+
+    <br>
+    <h2 class="w3-center">Encyclopedia Search</h2>
+    <br>
+
+    <div class="w3-container">
+      <form onsubmit="return handleSubmit(event)">
+        <label for="fname">Search:</label><br>
+        <input type="text" id="search" class="w3-input w3-border" autocomplete="off"><br>
+        <div class="w3-center">
+        <input type="submit" value="Search" class="w3-btn w3-green">
+        </div>
+      </form>
+    </div>
+    <br>
+
+    <div id="spin-holder"></div>
+
+    <p id="result"></p>
+
+  </div>
+
+</body>
+
+
+
+<!-- SCRIPTS -->
+<script>
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    $('#spin-holder').addClass('spinner');
+    $('#result').empty();
+
+    const search = $('#search').val();
+    wikiSearch(search).then(respose => {
+      $('#spin-holder').removeClass('spinner');
+
+      if (respose['validSearch']) {
+        respose['summary'].forEach(p => {
+          $('#result').append(`<p>${p}</p>`)
+        })
+      } else {
+        $('#result').append(`<p>No results found. Please refine your search.</p>`)
+      }
+    });
+  };
+
+
+</script>
+
+
+</html>
