@@ -1,37 +1,8 @@
-from datetime import datetime
-import time
-import boto3
 from utils import response
+from db import PostsDB
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('publicForum')
-
-def get_posts():
-    data = table.scan(
-        Limit=50,
-    )
-    data = data['Items']
-    return [
-        {
-            'timestamp': int(x['timestamp']),
-            'time': str(x['time']),
-            'post': str(x['post']),
-        } for x in data
-    ]
-
-
-def add_post(post):
-    status = table.put_item(
-        Item={
-            'id': hash(post),
-            'timestamp': int(time.time()),
-            'time': str(datetime.now().strftime('%m-%d %H:%M')),
-            'TTL': int(time.time()),
-            'post': post,
-        }
-    )
-    return status
-
+posts_db = PostsDB()
+cached_response = None
 
 def lambda_handler(event, context):
 
@@ -49,12 +20,19 @@ def lambda_handler(event, context):
     # add new post
     if action == 'POST':
         post = params['post'].strip()
-        add_post(post)
+        posts_db.add_post(post)
 
     # return list of posts
+    global cached_response
+    if cached_response and posts_db.is_valid_cache():
+        posts_list = cached_response
+    else:
+        posts_list = posts_db.get_posts()
+        cached_response = posts_list
+
     return response(
         {
             'success': True,
-            'posts': get_posts(),
+            'posts': posts_list,
         }
     )
