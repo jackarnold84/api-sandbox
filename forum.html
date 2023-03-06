@@ -19,7 +19,7 @@
 
   <!-- HEADER -->
   <a href="index.html">
-    <div class="w3-container w3-black w3-padding">
+    <div class="w3-black w3-padding">
       <div class="w3-center fit-width">
         <h1 class="w3-xxlarge bold">API Sandbox</h1>
       </div>
@@ -28,29 +28,28 @@
 
 
   <!-- CONTENT -->
-  <div class="w3-container fit-width">
+  <div class="x3-container auto" style="max-width: 800px;">
 
-    <br>
     <h2 class="w3-center">Public Forum</h2>
-    <br>
 
     <!-- Posts -->
     <h5 class="w3-center">Recent Posts</h5>
 
-    <div id="post-holder" class="w3-margin-bottom"></div>
-    <p id="error-msg" class="w3-center w3-text-red"></p>
-
-    <br>
-
+    <div class="x3-row">
+      <div id="post-holder" class=""></div>
+      <p id="error-msg" class="center x3-red-text"></p>
+    </div>
 
     <!-- New post form -->
-    <div class="w3-container">
+    <div class="x3-row">
       <form onsubmit="return handleSubmit(event)">
-        <label for="fname">New Post:</label><br>
-        <input type="text" id="post-input" class="w3-input w3-border" autocomplete="off"
-          placeholder="enter a message to post to the community board"><br>
-        <div class="w3-center">
-          <input type="submit" value="Post" class="w3-btn w3-green">
+        <div class="x3-row">
+          <label for="fname" class="x3-label">New Post:</label>
+          <input type="text" id="post-input" class="x3-input" autocomplete="off"
+            placeholder="enter a message to post to the community board"><br>
+        </div>
+        <div class="x3-row center">
+          <input type="submit" value="Post" class="x3-button x3-green-btn">
         </div>
       </form>
     </div>
@@ -66,12 +65,17 @@
 <script>
 
   // components
-  const PostComponent = (time, post) => (`
-    <div class="forum-post">
-      <span class="semibold">[${time}]</span>
-      ${post}
-    </div>
-  `)
+  const PostComponent = (timestamp, post) => {
+    const date = epochTimeToDate(timestamp);
+    const formattedTime = `${formatDate(date, 'date')} ${formatDate(date, 'time')}`;
+
+    return (`
+      <div class="forum-post">
+        <span class="semibold">[${formattedTime}]</span>
+        ${post}
+      </div>
+    `);
+  };
 
 
   // load posts
@@ -79,7 +83,7 @@
     .then(response => {
       posts = sortByIntValue(response.posts, 'timestamp');
       posts.forEach(p => {
-        $('#post-holder').append(PostComponent(p.time, p.post));
+        $('#post-holder').append(PostComponent(p.timestamp, p.post));
       })
     })
     .catch(error => {
@@ -96,7 +100,7 @@
         $('#post-holder').empty();
         posts = sortByIntValue(response.posts, 'timestamp');
         posts.forEach(p => {
-          $('#post-holder').append(PostComponent(p.time, p.post));
+          $('#post-holder').append(PostComponent(p.timestamp, p.post));
         })
         $('#post-input').val('');
       })

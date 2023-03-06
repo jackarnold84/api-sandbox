@@ -19,7 +19,7 @@
 
   <!-- HEADER -->
   <a href="index.html">
-    <div class="w3-container w3-black w3-padding">
+    <div class="w3-black w3-padding">
       <div class="w3-center fit-width">
         <h1 class="w3-xxlarge bold">API Sandbox</h1>
       </div>
@@ -28,26 +28,28 @@
 
 
   <!-- CONTENT -->
-  <div class="w3-container fit-width">
+  <div class="x3-container auto" style="max-width: 800px;">
 
-    <br>
     <h2 class="w3-center">Encyclopedia Search</h2>
-    <br>
 
-    <div class="w3-container">
+    <div class="x3-row">
       <form onsubmit="return handleSubmit(event)">
-        <label for="fname">Search:</label><br>
-        <input type="text" id="search" class="w3-input w3-border" autocomplete="off"><br>
-        <div class="w3-center">
-        <input type="submit" value="Search" class="w3-btn w3-green">
+        <div class="x3-row">
+          <label for="fname" class="x3-label">Search:</label>
+          <input type="text" id="search" class="x3-input" autocomplete="off">
+        </div>
+        <div class="x3-row center">
+          <input type="submit" value="Search" class="x3-button x3-green-btn">
         </div>
       </form>
     </div>
     <br>
 
-    <div id="spin-holder"></div>
+    <div class="center">
+      <div id="loader-holder" class="center"></div>
+    </div>
 
-    <p id="result"></p>
+    <p id="result" class="text"></p>
 
   </div>
 
@@ -60,12 +62,12 @@
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    $('#spin-holder').addClass('spinner');
+    $('#loader-holder').addClass('loader');
     $('#result').empty();
 
     const search = $('#search').val();
     wikiSearch(search).then(respose => {
-      $('#spin-holder').removeClass('spinner');
+      $('#loader-holder').removeClass('loader');
 
       if (respose['validSearch']) {
         respose['summary'].forEach(p => {

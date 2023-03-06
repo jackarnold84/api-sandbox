@@ -19,7 +19,7 @@
 
   <!-- HEADER -->
   <a href="index.html">
-    <div class="w3-container w3-black w3-padding">
+    <div class="w3-black w3-padding">
       <div class="w3-center fit-width">
         <h1 class="w3-xxlarge bold">API Sandbox</h1>
       </div>
@@ -28,29 +28,31 @@
 
 
   <!-- CONTENT -->
-  <div class="w3-container fit-width">
+  <div class="x3-container auto" style="max-width: 800px;">
 
-    <br>
     <h2 class="w3-center">Select a tool</h2>
-    <br>
 
-    <a href="encyclopedia.html">
-      <h3>Encyclopedia Search</h3>
-    </a>
-    <div class="text">
-      A search tool to give you a quick summary of any topic. A 
-      lambda function will use BeautifulSoup to parse
-      a wikipedia article related to your search.
+    <div class="x3-row x3-b16">
+      <a href="encyclopedia.html" class="x3-link">
+        <h3>Encyclopedia Search</h3>
+      </a>
+      <div class="text">
+        A search tool to give you a quick summary of any topic. A
+        lambda function will use BeautifulSoup to parse
+        a wikipedia article related to your search.
+      </div>
+    </div>
+
+    <div class="x3-row x3-b16">
+      <a href="forum.html" class="x3-link">
+        <h3>Public Forum</h3>
+      </a>
+      <div class="text">
+        Post messages to a page for anyone to view. Messages are
+        stored and accessed using AWS DynamoDB.
+      </div>
     </div>
     <br>
-
-    <a href="forum.html">
-      <h3>Public Forum</h3>
-    </a>
-    <div class="text">
-      Post messages to a page for anyone to view. Messages are
-      stored and accessed using AWS DynamoDB.
-    </div>
 
   </div>
 
