@@ -1,0 +1,14 @@
+### Create a new lambda function:
+- AWS console > Lambda
+- Create new function (from scratch)
+- Add trigger
+    - REST API (create new if needed)
+    - default stage
+    - open security
+- Add layers
+    - for any necessary packages
+    - specify an ARN
+    - see: https://github.com/keithrozario/Klayers/
+- Create folder `lamdas/${lambdaName}`
+    - add `lambda_function.py` with `lambda_handler(event, context)`
+- Deploy with `python service/deploy.py`

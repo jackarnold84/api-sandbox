@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Encyclopedia Search</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="static/images/icon.png">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="static/utils.js"></script>
+  <script src="api.js"></script>
+</head>
+
+
+
+<body>
+
+  <!-- HEADER -->
+  <a href="index.html">
+    <div class="w3-black w3-padding">
+      <div class="w3-center fit-width">
+        <h1 class="w3-xxlarge bold">API Sandbox</h1>
+      </div>
+    </div>
+  </a>
+
+
+  <!-- CONTENT -->
+  <div class="x3-container auto" style="max-width: 800px;">
+
+    <h2 class="w3-center">Data Summarizer</h2>
+
+    <div class="x3-row">
+      <form onsubmit="return handleSubmit(event)">
+        <div class="x3-row center">
+          <div>Upload a CSV file</div>
+          <input type="file" id="file-input" accept=".csv, text/plain" class="file-input">
+        </div>
+        <div class="x3-row center">
+          <input type="submit" value="Analyze" class="x3-button x3-green-btn">
+        </div>
+      </form>
+    </div>
+    <br>
+
+    <div class="x3-row">
+      <div id="error-msg" class="center text x3-red-text"></div>
+      <h4 id="result-header" class="center off">Column Averages</h4>
+      <table id="result" class="text auto w3-table" style="max-width: 200px;"></table>
+    </div>
+
+  </div>
+
+</body>
+
+
+
+<!-- SCRIPTS -->
+<script>
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    $('#error-msg').text('');
+    $('#result-header').hide();
+    $('#result').empty();
+    if ($('#file-input').prop('files').length === 0) {
+      $('#error-msg').text('No file was uploaded');
+      return;
+    };
+    
+    const reader = new FileReader()
+    reader.onload = () => summarizeFile(reader.result);
+    reader.readAsBinaryString($('#file-input').prop('files')[0])
+  };
+
+  const summarizeFile = (text) => {
+    if (text.length > 100000) {
+      $('#error-msg').text('Max file size exceeded');
+      return;
+    }
+    dataSummarizerAPI(text).then(response => {
+      if (!response.validFile) {
+        $('#error-msg').text('Invalid file format');
+        return;
+      };
+      if (response.summary.length === 0) {
+        $('#error-msg').text('No data entries to summarize');
+        return;
+      };
+
+      $('#result-header').show();
+      response.summary.forEach(col => {
+        $('#result').append(`
+          <tr><td>${col.name}</td> <td>${col.mean}</td></tr>
+        `);
+      });
+    });
+  }
+
+
+</script>
+
+
+</html>

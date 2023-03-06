@@ -37,6 +37,15 @@ th {
   color: #AD2A1A;
 }
 
+.file-input {
+  font-size: 16px;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+  padding: 4px;
+  width: 350px;
+  max-width: 100%;
+}
+
 
 
 

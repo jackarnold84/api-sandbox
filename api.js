@@ -35,3 +35,21 @@ const publicForumAPI = async (action, post='') => {
     .then(response => response.json())
     .catch(error => console.warn(error))
 };
+
+
+const dataSummarizerAPI = async (fileContent) => {
+
+  apiUrl = 'https://p8q5t9dto5.execute-api.us-east-2.amazonaws.com/default/dataSummarizer';
+
+  return fetch(apiUrl + '?' + new URLSearchParams(
+    {
+      'fileContent': fileContent,
+    }
+  ),
+    {
+      'method': 'GET',
+    }
+  )
+    .then(response => response.json())
+    .catch(error => console.warn(error))
+};
