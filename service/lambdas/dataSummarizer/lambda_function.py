@@ -36,7 +36,9 @@ def lambda_handler(event, context):
             data = df[cols[i]].dropna()
             column_summary.append({
                 'name': str(cols[i]),
-                'mean': round(data.mean(), 2)
+                'mean': round(data.mean(), 2),
+                'entries': len(data),
+                'std': round(data.std(), 2),
             })
 
     return response(

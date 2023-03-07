@@ -32,7 +32,7 @@
 
     <h2 class="w3-center">Data Summarizer</h2>
 
-    <div class="x3-row">
+    <div class="x3-row x3-b16">
       <form onsubmit="return handleSubmit(event)">
         <div class="x3-row center">
           <div>Upload a CSV file</div>
@@ -43,12 +43,10 @@
         </div>
       </form>
     </div>
-    <br>
 
     <div class="x3-row">
       <div id="error-msg" class="center text x3-red-text"></div>
-      <h4 id="result-header" class="center off">Column Averages</h4>
-      <table id="result" class="text auto w3-table" style="max-width: 200px;"></table>
+      <table id="result" class="text auto w3-table off" style="max-width: 200px;"></table>
     </div>
 
   </div>
@@ -60,16 +58,32 @@
 <!-- SCRIPTS -->
 <script>
 
+  const ColSummaryComponent = (name, entries, mean, std) => (`
+    <tr>
+      <td>${name}</td>
+      <td>${entries}</td>
+      <td>${mean}</td>
+      <td>${std}</td>
+    </tr>
+  `);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     $('#error-msg').text('');
-    $('#result-header').hide();
-    $('#result').empty();
+    $('#result').hide().empty();
+    $('#result').append(`
+      <tr>
+        <th>Column</th>
+        <th>Entries</th>
+        <th>Mean</th>
+        <th>SD</th>
+      </tr>
+    `);
     if ($('#file-input').prop('files').length === 0) {
       $('#error-msg').text('No file was uploaded');
       return;
     };
-    
+
     const reader = new FileReader()
     reader.onload = () => summarizeFile(reader.result);
     reader.readAsBinaryString($('#file-input').prop('files')[0])
@@ -90,14 +104,14 @@
         return;
       };
 
-      $('#result-header').show();
+      $('#result').show();
       response.summary.forEach(col => {
-        $('#result').append(`
-          <tr><td>${col.name}</td> <td>${col.mean}</td></tr>
-        `);
+        $('#result').append(
+          ColSummaryComponent(col.name, col.entries, col.mean, col.std)
+        );
       });
     });
-  }
+  };
 
 
 </script>
